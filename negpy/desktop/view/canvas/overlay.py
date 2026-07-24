@@ -418,13 +418,23 @@ class CanvasOverlay(QWidget):
         y1, y2 = sorted((c1[1], c2[1]))
         return (max(0.0, x1), max(0.0, y1), min(1.0, x2), min(1.0, y2))
 
+    def _crop_draw_rect(self) -> QRectF:
+        """The (normalized) rectangle spanned by the in-progress crop drag.
+
+        Uses the drag end point ``_crop_draw_p2`` whenever it is set, falling back
+        to the start point only before the first move (a click with no drag). The
+        end point must be tested with ``is not None``, never a truthy ``or``:
+        QPointF is falsy at the origin (0, 0), so ``p2 or p1`` would collapse a
+        drag that ends at the top-left corner back to a zero-size rect at p1.
+        """
+        p1 = self._crop_draw_p1
+        assert p1 is not None  # callers guard on `_crop_draw_p1 is not None`
+        end = self._crop_draw_p2 if self._crop_draw_p2 is not None else p1
+        return QRectF(p1, end).normalized()
+
     def _draw_crop_tool(self, painter: QPainter) -> None:
         if self._crop_drag_mode == "draw" and self._crop_draw_p1 is not None:
-            rect = (
-                QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1))
-                .normalized()
-                .intersected(self._view_rect)
-            )
+            rect = self._crop_draw_rect().intersected(self._view_rect)
             pen = QPen(Qt.GlobalColor.white, 1, Qt.PenStyle.DashLine)
             pen.setCosmetic(True)
             painter.setBrush(Qt.BrushStyle.NoBrush)
@@ -733,8 +743,7 @@ class CanvasOverlay(QWidget):
             return
 
         if self._crop_drag_mode == "draw" and self._crop_draw_p1 is not None:
-            r = QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1)).normalized()
-            r = r.intersected(self._view_rect)
+            r = self._crop_draw_rect().intersected(self._view_rect)
             uv_grid = self._crop_uv_grid
             if r.width() > 5 and r.height() > 5 and uv_grid is not None:
                 c1 = self._raw_from_screen_with_grid(r.topLeft(), uv_grid)
