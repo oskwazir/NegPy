@@ -38,7 +38,6 @@ type:
 		--ignore "unresolved-import" \
 		--ignore "unsupported-bool-conversion" \
 		--ignore "invalid-assignment" \
-		--ignore "invalid-parameter-default" \
 		--ignore "call-non-callable"
 
 # Unit tests (pytest)

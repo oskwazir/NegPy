@@ -209,7 +209,7 @@ class CompactSlider(BaseSlider):
         default_val: float,
         step: float = 0.01,
         precision: int = 100,
-        color: str = None,
+        color: str | None = None,
         has_neutral: bool = False,
         unit: str = "",
         inverted: bool = False,
