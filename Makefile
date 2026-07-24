@@ -34,7 +34,6 @@ type:
 		--ignore "invalid-method-override" \
 		--ignore "not-iterable" \
 		--ignore "unsupported-operator" \
-		--ignore "invalid-argument-type" \
 		--ignore "unused-type-ignore-comment" \
 		--ignore "unresolved-import" \
 		--ignore "unsupported-bool-conversion" \

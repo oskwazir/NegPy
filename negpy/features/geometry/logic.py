@@ -358,11 +358,11 @@ def _snap_film_bounds_to_bed_gradient(roi: ROI, lum: np.ndarray) -> ROI:
     row_profile = lum[:, x1:x2].mean(axis=1)
     # 16px floor: contour morphology kernels are fixed-pixel (21-31px), so their
     # inflation doesn't shrink with image size the way the 2% window does.
-    snap = dict(window_out=0.02, window_in=0.02, min_dominance=3.0, min_window_px=16)
-    nx1 = _snap_edge_to_gradient(col_profile, x1, is_start=True, **snap)
-    nx2 = _snap_edge_to_gradient(col_profile, x2, is_start=False, **snap)
-    ny1 = _snap_edge_to_gradient(row_profile, y1, is_start=True, **snap)
-    ny2 = _snap_edge_to_gradient(row_profile, y2, is_start=False, **snap)
+    snap = dict(window_out=0.02, window_in=0.02, min_dominance=3.0)
+    nx1 = _snap_edge_to_gradient(col_profile, x1, is_start=True, min_window_px=16, **snap)
+    nx2 = _snap_edge_to_gradient(col_profile, x2, is_start=False, min_window_px=16, **snap)
+    ny1 = _snap_edge_to_gradient(row_profile, y1, is_start=True, min_window_px=16, **snap)
+    ny2 = _snap_edge_to_gradient(row_profile, y2, is_start=False, min_window_px=16, **snap)
     if ny2 - ny1 <= 0 or nx2 - nx1 <= 0:
         return roi
     # Keep the bed->film transition rows inside the box: downstream refinement needs

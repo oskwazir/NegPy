@@ -171,11 +171,18 @@ class GPUBuffer:
             raise RuntimeError("Hardware device required")
         self.buffer = gpu.device.create_buffer(size=size, usage=usage)
 
+    @property
+    def handle(self) -> "wgpu.GPUBuffer":
+        """Live wgpu buffer handle; valid until ``destroy()``. Raises if used after."""
+        if self.buffer is None:
+            raise RuntimeError("GPUBuffer accessed after destroy()")
+        return self.buffer
+
     def upload(self, data: np.ndarray) -> None:
         gpu = GPUDevice.get()
         if not gpu.device:
             return
-        gpu.device.queue.write_buffer(self.buffer, 0, data)
+        gpu.device.queue.write_buffer(self.handle, 0, data)
 
     def destroy(self) -> None:
         try:

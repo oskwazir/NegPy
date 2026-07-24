@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PyQt6.QtCore import Qt, qInstallMessageHandler
+from PyQt6.QtCore import QMessageLogContext, Qt, QtMsgType, qInstallMessageHandler
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication
 
@@ -36,7 +36,9 @@ _PAINTER_NOISE = (
 )
 
 
-def _filter_qt_messages(mode, context, message: str) -> None:
+def _filter_qt_messages(mode: QtMsgType, context: QMessageLogContext, message: str | None) -> None:
+    if message is None:
+        return
     if message.startswith(_PAINTER_NOISE):
         return
     sys.stderr.write(message + "\n")

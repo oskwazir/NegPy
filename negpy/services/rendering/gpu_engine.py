@@ -472,6 +472,9 @@ class GPUEngine:
                 ceils=settings.process.local_ceils,
             )
         else:
+            # Reaching here means needs_bounds_analysis was True, which is exactly the
+            # condition that populated analysis_source above.
+            assert analysis_source is not None
             bounds = analyze_log_exposure_bounds(
                 analysis_source,
                 analysis_roi,
@@ -811,7 +814,7 @@ class GPUEngine:
             tex_final, content_rect = tex_for_layout, (0, 0, crop_w, crop_h)
 
         if not tiling_mode and readback_metrics:
-            device.queue.write_buffer(self._buffers["metrics"].buffer, 0, np.zeros(1024, dtype=np.uint32))
+            device.queue.write_buffer(self._buffers["metrics"].handle, 0, np.zeros(1024, dtype=np.uint32))
             # Always compute metrics on the content image (tex_toning) before any
             # border/layout pass so that border pixels don't skew the histogram.
             self._dispatch_pass(
@@ -1141,7 +1144,7 @@ class GPUEngine:
 
         if not self.gpu.device:
             raise RuntimeError("GPU device lost")
-        self.gpu.device.queue.write_buffer(self._buffers["unified_u"].buffer, 0, full_buffer)
+        self.gpu.device.queue.write_buffer(self._buffers["unified_u"].handle, 0, full_buffer)
 
     def _transform_ir_for_gpu(
         self,
@@ -1288,7 +1291,7 @@ class GPUEngine:
             usage=wgpu.BufferUsage.COPY_DST | wgpu.BufferUsage.MAP_READ,
         )
         encoder = device.create_command_encoder()
-        encoder.copy_buffer_to_buffer(self._buffers["clahe_c"].buffer, 0, read_buf, 0, nbytes)
+        encoder.copy_buffer_to_buffer(self._buffers["clahe_c"].handle, 0, read_buf, 0, nbytes)
         device.queue.submit([encoder.finish()])
         read_buf.map_sync(wgpu.MapMode.READ)
         data = np.frombuffer(read_buf.read_mapped(), dtype=np.float32).copy()
@@ -1310,7 +1313,7 @@ class GPUEngine:
         else:
             read_buf = self._metrics_staging
         encoder = device.create_command_encoder()
-        encoder.copy_buffer_to_buffer(self._buffers["metrics"].buffer, 0, read_buf, 0, METRICS_BUFFER_SIZE)
+        encoder.copy_buffer_to_buffer(self._buffers["metrics"].handle, 0, read_buf, 0, METRICS_BUFFER_SIZE)
         device.queue.submit([encoder.finish()])
         read_buf.map_sync(wgpu.MapMode.READ)
         data = np.frombuffer(read_buf.read_mapped(), dtype=np.uint32).copy()

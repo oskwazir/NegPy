@@ -291,7 +291,7 @@ def _exif_bytes_to_extratags(exif_bytes: bytes) -> tuple[str | None, list[tuple]
             tag_info = type_table.get(tag)
             if not tag_info:
                 continue
-            entry = _build_extratag(tag, tag_info["type"], value)
+            entry = _build_extratag(tag, int(tag_info["type"]), value)
             if entry is not None:
                 extratags.append(entry)
 
