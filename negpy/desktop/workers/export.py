@@ -100,7 +100,7 @@ class ExportWorker(QObject):
                         out_dir = source_dir
                     os.makedirs(out_dir, exist_ok=True)
 
-                    _EXT = {
+                    _EXT: dict[str, str] = {
                         ExportFormat.JPEG: "jpg",
                         ExportFormat.TIFF: "tiff",
                         ExportFormat.PNG: "png",

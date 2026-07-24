@@ -29,7 +29,6 @@ type:
 	@echo "Running type checks (ty)..."
 	@$(UV) ty check \
 		--exclude "tests/" --exclude "docs/" --exclude "build/" --exclude "dist/" --exclude ".venv/" \
-		--ignore "no-matching-overload" \
 		--ignore "unresolved-attribute" \
 		--ignore "invalid-method-override" \
 		--ignore "unsupported-operator" \

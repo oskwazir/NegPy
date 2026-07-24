@@ -555,7 +555,9 @@ class _RgbTripletDialog(QDialog):
         self._edits: dict[str, QLineEdit] = {}
         for label, path in (("Red", red), ("Green", green), ("Blue", blue)):
             row = QHBoxLayout()
-            row.addWidget(QLabel(label, minimumWidth=48))
+            name_label = QLabel(label)
+            name_label.setMinimumWidth(48)
+            row.addWidget(name_label)
             edit = QLineEdit(path)
             row.addWidget(edit, 1)
             browse = QPushButton("Browse…")

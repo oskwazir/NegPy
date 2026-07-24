@@ -728,7 +728,7 @@ class CanvasOverlay(QWidget):
             event.accept()
             return
 
-        if self._crop_drag_mode == "draw":
+        if self._crop_drag_mode == "draw" and self._crop_draw_p1 is not None:
             r = QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1)).normalized()
             r = r.intersected(self._view_rect)
             uv_grid = self._crop_uv_grid

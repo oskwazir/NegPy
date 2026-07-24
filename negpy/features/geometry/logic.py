@@ -126,7 +126,7 @@ def _dark_region_bounds(image: np.ndarray) -> tuple[int, int, int, int] | None:
     if not contours:
         return None
 
-    contour = max(contours, key=cv2.contourArea)
+    contour = max(contours, key=lambda c: float(cv2.contourArea(c)))
     x, y, box_w, box_h = cv2.boundingRect(contour)
     image_area = float(gray.shape[0] * gray.shape[1])
     area_ratio = float(cv2.contourArea(contour)) / max(image_area, 1.0)

@@ -38,7 +38,10 @@ class ImageConverter:
 
         # 3. Create QImage
         # RGB888 is standard for our 3-channel processed output
-        qimg = QImage(u8_buffer.data, w, h, w * 3, QImage.Format.Format_RGB888)
+        # memoryview is accepted at runtime via the buffer protocol; PyQt6 stubs
+        # only type the first arg as bytes | sip.voidptr. Passing bytes() would add
+        # a full-frame copy on this hot path (we already .copy() below).
+        qimg = QImage(u8_buffer.data, w, h, w * 3, QImage.Format.Format_RGB888)  # ty: ignore[no-matching-overload]
 
         # CRITICAL: QImage from data does NOT own the memory.
         # We MUST return a deep copy so that if the numpy buffer is cleared,
