@@ -12,6 +12,11 @@ class BaseSidebar(QWidget):
     Handles common setup and configuration updates.
     """
 
+    # `_init_layout` assigns a QVBoxLayout to `self.layout`, deliberately shadowing
+    # QWidget's inherited `layout()` method (all sidebars use `self.layout` as the
+    # root box). Declare it so the attribute type wins over the method.
+    layout: QVBoxLayout
+
     def __init__(self, controller: AppController):
         super().__init__()
         self.controller = controller
