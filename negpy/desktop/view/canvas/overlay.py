@@ -420,7 +420,7 @@ class CanvasOverlay(QWidget):
 
     def _draw_crop_tool(self, painter: QPainter) -> None:
         if self._crop_drag_mode == "draw" and self._crop_draw_p1 is not None:
-            rect = QRectF(self._crop_draw_p1, self._crop_draw_p2 or self._crop_draw_p1).normalized().intersected(self._view_rect)
+            rect = QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1)).normalized().intersected(self._view_rect)
             pen = QPen(Qt.GlobalColor.white, 1, Qt.PenStyle.DashLine)
             pen.setCosmetic(True)
             painter.setBrush(Qt.BrushStyle.NoBrush)
@@ -729,7 +729,7 @@ class CanvasOverlay(QWidget):
             return
 
         if self._crop_drag_mode == "draw":
-            r = QRectF(self._crop_draw_p1, self._crop_draw_p2 or self._crop_draw_p1).normalized()
+            r = QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1)).normalized()
             r = r.intersected(self._view_rect)
             uv_grid = self._crop_uv_grid
             if r.width() > 5 and r.height() > 5 and uv_grid is not None:

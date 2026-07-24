@@ -36,7 +36,6 @@ type:
 		--ignore "unsupported-operator" \
 		--ignore "unused-type-ignore-comment" \
 		--ignore "unresolved-import" \
-		--ignore "unsupported-bool-conversion" \
 		--ignore "invalid-assignment" \
 		--ignore "call-non-callable"
 
