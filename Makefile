@@ -32,7 +32,6 @@ type:
 		--ignore "no-matching-overload" \
 		--ignore "unresolved-attribute" \
 		--ignore "invalid-method-override" \
-		--ignore "not-iterable" \
 		--ignore "unsupported-operator" \
 		--ignore "unused-type-ignore-comment" \
 		--ignore "unresolved-import" \

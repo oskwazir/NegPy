@@ -50,7 +50,7 @@ def _apply_lut_u16_jit(img: np.ndarray, lut: np.ndarray) -> np.ndarray:
     n = lut.shape[0]
     scale = np.float32(n - 1) / np.float32(65535.0)
     out = np.empty_like(img)
-    for y in prange(h):
+    for y in prange(h):  # ty: ignore[not-iterable]  # numba JIT intrinsic; iterable under @njit(parallel=True)
         for x in range(w):
             rf = np.float32(img[y, x, 0]) * scale
             gf = np.float32(img[y, x, 1]) * scale
@@ -115,7 +115,7 @@ def _apply_lut_f32_jit(img: np.ndarray, lut: np.ndarray) -> np.ndarray:
     n = lut.shape[0]
     scale = np.float32(n - 1)
     out = np.empty_like(img)
-    for y in prange(h):
+    for y in prange(h):  # ty: ignore[not-iterable]  # numba JIT intrinsic; iterable under @njit(parallel=True)
         for x in range(w):
             rf = min(max(img[y, x, 0], np.float32(0.0)), np.float32(1.0)) * scale
             gf = min(max(img[y, x, 1], np.float32(0.0)), np.float32(1.0)) * scale

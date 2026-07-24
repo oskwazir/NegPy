@@ -324,7 +324,7 @@ def _build_extratag(tag: int, ttype: int, value: object) -> tuple | None:
         if isinstance(value, (list, tuple)) and all(isinstance(v, tuple) and len(v) == 2 for v in value):
             # tifffile internally doubles count for RATIONAL and unpacks `*value`,
             # so multi-element values must be a flat sequence of ints.
-            flat = [n for pair in value for n in pair]
+            flat = [n for pair in value if isinstance(pair, tuple) for n in pair]
             return (tag, ttype, len(value), flat, True)
         return None
 
