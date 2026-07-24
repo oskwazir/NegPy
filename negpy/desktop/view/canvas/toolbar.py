@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
 from negpy.desktop.controller import AppController
 from negpy.desktop.view.styles.templates import swatch_qss
 from negpy.desktop.view.styles.theme import THEME
+from negpy.desktop.view.qt_utils import require_action
 from negpy.infrastructure.gpu.device import GPUDevice
 from negpy.kernel.system.config import APP_CONFIG
 
@@ -178,56 +179,57 @@ class ActionToolbar(QWidget):
         overflow_menu = QMenu(self.btn_overflow)
 
         # Overflow: swatches + HQ group (<720px)
-        self._ov_hq_action = overflow_menu.addAction("Toggle HQ Preview")
+        self._ov_hq_action = require_action(overflow_menu.addAction("Toggle HQ Preview"))
         self._ov_hq_action.setCheckable(True)
         self._ov_hq_action.setVisible(False)
         overflow_menu.addSeparator()
         self._ov_color_actions: list = []
         for i, (hex_col, _, label) in enumerate(CANVAS_COLORS):
-            action = overflow_menu.addAction(f"Canvas: {label}")
+            action = require_action(overflow_menu.addAction(f"Canvas: {label}"))
             action.setVisible(False)
             self._ov_color_actions.append(action)
 
         # Overflow: flip + rotate group (<580px)
-        self._ov_sep_main = overflow_menu.addSeparator()
+        self._ov_sep_main = require_action(overflow_menu.addSeparator())
         self._ov_sep_main.setVisible(False)
-        self._ov_rot_l_action = overflow_menu.addAction(qta.icon("fa5s.undo", color=icon_color), "Rotate CCW")
+        self._ov_rot_l_action = require_action(overflow_menu.addAction(qta.icon("fa5s.undo", color=icon_color), "Rotate CCW"))
         self._ov_rot_l_action.setVisible(False)
-        self._ov_rot_r_action = overflow_menu.addAction(qta.icon("fa5s.redo", color=icon_color), "Rotate CW")
+        self._ov_rot_r_action = require_action(overflow_menu.addAction(qta.icon("fa5s.redo", color=icon_color), "Rotate CW"))
         self._ov_rot_r_action.setVisible(False)
-        self._ov_flip_h_action = overflow_menu.addAction(qta.icon("fa5s.arrows-alt-h", color=icon_color), "Flip Horizontal")
+        self._ov_flip_h_action = require_action(overflow_menu.addAction(qta.icon("fa5s.arrows-alt-h", color=icon_color), "Flip Horizontal"))
         self._ov_flip_h_action.setCheckable(True)
         self._ov_flip_h_action.setVisible(False)
-        self._ov_flip_v_action = overflow_menu.addAction(qta.icon("fa5s.arrows-alt-v", color=icon_color), "Flip Vertical")
+        self._ov_flip_v_action = require_action(overflow_menu.addAction(qta.icon("fa5s.arrows-alt-v", color=icon_color), "Flip Vertical"))
         self._ov_flip_v_action.setCheckable(True)
         self._ov_flip_v_action.setVisible(False)
-        self._ov_sep_rotate = overflow_menu.addSeparator()
+        self._ov_sep_rotate = require_action(overflow_menu.addSeparator())
         self._ov_sep_rotate.setVisible(False)
 
-        self._action_undo = overflow_menu.addAction(qta.icon("fa5s.arrow-left", color=icon_color), "Undo  Ctrl+Z", self.session.undo)
-        self._action_redo = overflow_menu.addAction(qta.icon("fa5s.arrow-right", color=icon_color), "Redo  Ctrl+Y", self.session.redo)
+        self._action_undo = require_action(overflow_menu.addAction(qta.icon("fa5s.arrow-left", color=icon_color), "Undo  Ctrl+Z", self.session.undo))
+        self._action_redo = require_action(overflow_menu.addAction(qta.icon("fa5s.arrow-right", color=icon_color), "Redo  Ctrl+Y", self.session.redo))
         overflow_menu.addSeparator()
-        self._action_copy = overflow_menu.addAction(
+        self._action_copy = require_action(overflow_menu.addAction(
             qta.icon("fa5s.copy", color=icon_color), "Copy Settings  Ctrl+C", self.session.copy_settings
-        )
-        self._action_copy_bounds = overflow_menu.addAction(
+        ))
+        self._action_copy_bounds = require_action(overflow_menu.addAction(
             qta.icon("fa5s.copy", color=icon_color), "Copy Settings + Bounds  Ctrl+Shift+C", self.session.copy_settings_with_bounds
-        )
-        self._action_paste = overflow_menu.addAction(
+        ))
+        self._action_paste = require_action(overflow_menu.addAction(
             qta.icon("fa5s.paste", color=icon_color), "Paste Settings  Ctrl+V", self.session.paste_settings
-        )
+        ))
         overflow_menu.addSeparator()
         overflow_menu.addAction(qta.icon("fa5s.history", color=icon_color), "Reset Settings", self.session.reset_settings)
         overflow_menu.addSeparator()
         overflow_menu.addAction(qta.icon("fa5s.times-circle", color=icon_color), "Unload", self.session.remove_current_file)
         overflow_menu.addSeparator()
         scale_menu = overflow_menu.addMenu(qta.icon("fa5s.search-plus", color=icon_color), "UI Scale")
+        assert scale_menu is not None
         self._ui_scale_group = QActionGroup(self)
         self._ui_scale_group.setExclusive(True)
         current_scale = float(self.session.repo.get_global_setting("ui_scale", 1.0) or 1.0)
         for pct in (80, 90, 100, 110, 120):
             val = pct / 100.0
-            act = scale_menu.addAction(f"{pct}%")
+            act = require_action(scale_menu.addAction(f"{pct}%"))
             act.setCheckable(True)
             act.setChecked(abs(val - current_scale) < 0.001)
             self._ui_scale_group.addAction(act)

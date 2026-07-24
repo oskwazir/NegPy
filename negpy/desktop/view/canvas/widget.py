@@ -8,6 +8,7 @@ from negpy.desktop.session import ToolMode, AppState
 from negpy.desktop.view.canvas.gpu_widget import GPUCanvasWidget
 from negpy.desktop.view.canvas.overlay import CanvasOverlay
 from negpy.desktop.view.canvas.pixel_readout import PixelReadoutOverlay
+from negpy.desktop.view.qt_utils import require_action
 from negpy.infrastructure.gpu.device import GPUDevice
 from negpy.infrastructure.gpu.resources import GPUTexture
 from negpy.kernel.system.config import APP_CONFIG
@@ -425,20 +426,20 @@ class ImageCanvas(QWidget):
             return
 
         menu = QMenu(self)
-        act_wb = menu.addAction("Pick WB  Shift+W")
-        act_wb.triggered.connect(lambda: self._controller.set_active_tool(ToolMode.WB_PICK))  # type: ignore[union-attr]
-        act_dust = menu.addAction("Pick Dust  Shift+D")
-        act_dust.triggered.connect(lambda: self._controller.set_active_tool(ToolMode.DUST_PICK))  # type: ignore[union-attr]
+        act_wb = require_action(menu.addAction("Pick WB  Shift+W"))
+        act_wb.triggered.connect(lambda: self._controller.set_active_tool(ToolMode.WB_PICK))
+        act_dust = require_action(menu.addAction("Pick Dust  Shift+D"))
+        act_dust.triggered.connect(lambda: self._controller.set_active_tool(ToolMode.DUST_PICK))
         menu.addSeparator()
-        act_copy = menu.addAction("Copy Settings  Ctrl+C")
-        act_copy.triggered.connect(self._controller.session.copy_settings)  # type: ignore[union-attr]
-        act_copy_bounds = menu.addAction("Copy Settings + Bounds  Ctrl+Shift+C")
-        act_copy_bounds.triggered.connect(self._controller.session.copy_settings_with_bounds)  # type: ignore[union-attr]
-        act_paste = menu.addAction("Paste Settings  Ctrl+V")
-        act_paste.triggered.connect(self._controller.session.paste_settings)  # type: ignore[union-attr]
+        act_copy = require_action(menu.addAction("Copy Settings  Ctrl+C"))
+        act_copy.triggered.connect(self._controller.session.copy_settings)
+        act_copy_bounds = require_action(menu.addAction("Copy Settings + Bounds  Ctrl+Shift+C"))
+        act_copy_bounds.triggered.connect(self._controller.session.copy_settings_with_bounds)
+        act_paste = require_action(menu.addAction("Paste Settings  Ctrl+V"))
+        act_paste.triggered.connect(self._controller.session.paste_settings)
         act_paste.setEnabled(self.state.clipboard is not None)
         menu.addSeparator()
-        act_reset = menu.addAction("Reset View")
+        act_reset = require_action(menu.addAction("Reset View"))
         act_reset.triggered.connect(self.fit_to_window)
         menu.exec(event.globalPos())
 

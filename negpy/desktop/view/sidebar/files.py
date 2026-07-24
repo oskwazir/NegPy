@@ -25,6 +25,7 @@ from PyQt6.QtWidgets import (
 
 from negpy.desktop.controller import AppController
 from negpy.desktop.view.styles.theme import THEME
+from negpy.desktop.view.qt_utils import require_action
 from negpy.infrastructure.filesystem.watcher import FolderWatchService
 from negpy.infrastructure.loaders.helpers import get_supported_raw_wildcards
 
@@ -219,16 +220,16 @@ class FileBrowser(QWidget):
         sort_menu = QMenu(self.sort_btn)
         self._order_group = QActionGroup(self)
         self._order_group.setExclusive(True)
-        self.act_sort_name = sort_menu.addAction("Name")
-        self.act_sort_date = sort_menu.addAction("Date")
+        self.act_sort_name = require_action(sort_menu.addAction("Name"))
+        self.act_sort_date = require_action(sort_menu.addAction("Date"))
         for act in (self.act_sort_name, self.act_sort_date):
             act.setCheckable(True)
             self._order_group.addAction(act)
         sort_menu.addSeparator()
         self._dir_group = QActionGroup(self)
         self._dir_group.setExclusive(True)
-        self.act_sort_asc = sort_menu.addAction("Ascending")
-        self.act_sort_desc = sort_menu.addAction("Descending")
+        self.act_sort_asc = require_action(sort_menu.addAction("Ascending"))
+        self.act_sort_desc = require_action(sort_menu.addAction("Descending"))
         for act in (self.act_sort_asc, self.act_sort_desc):
             act.setCheckable(True)
             self._dir_group.addAction(act)
@@ -505,25 +506,25 @@ class FileBrowser(QWidget):
 
         menu = QMenu(self)
         if multi:
-            menu.addAction("Export Selected").triggered.connect(lambda: self.controller.request_export_selected())
+            require_action(menu.addAction("Export Selected")).triggered.connect(lambda: self.controller.request_export_selected())
         else:
-            menu.addAction("Export").triggered.connect(lambda: self.controller.request_export())
+            require_action(menu.addAction("Export")).triggered.connect(lambda: self.controller.request_export())
         menu.addSeparator()
-        menu.addAction("Copy Settings  Ctrl+C").triggered.connect(self.session.copy_settings)
-        menu.addAction("Copy Settings + Bounds  Ctrl+Shift+C").triggered.connect(self.session.copy_settings_with_bounds)
-        act_paste = menu.addAction("Paste Settings  Ctrl+V")
+        require_action(menu.addAction("Copy Settings  Ctrl+C")).triggered.connect(self.session.copy_settings)
+        require_action(menu.addAction("Copy Settings + Bounds  Ctrl+Shift+C")).triggered.connect(self.session.copy_settings_with_bounds)
+        act_paste = require_action(menu.addAction("Paste Settings  Ctrl+V"))
         act_paste.triggered.connect(self.session.paste_settings)
         act_paste.setEnabled(state.clipboard is not None)
-        menu.addAction("Reset Settings").triggered.connect(self.session.reset_settings)
+        require_action(menu.addAction("Reset Settings")).triggered.connect(self.session.reset_settings)
         if multi:
             menu.addSeparator()
-            menu.addAction("Sync Edits to Selection").triggered.connect(lambda: self.session.sync_selected_settings("edits"))
+            require_action(menu.addAction("Sync Edits to Selection")).triggered.connect(lambda: self.session.sync_selected_settings("edits"))
         if not multi:
             menu.addSeparator()
-            menu.addAction("Edit RGB Triplet…").triggered.connect(self._on_edit_triplet)
+            require_action(menu.addAction("Edit RGB Triplet…")).triggered.connect(self._on_edit_triplet)
         menu.addSeparator()
         unload_label = "Unload Selected" if multi else "Unload"
-        menu.addAction(unload_label).triggered.connect(self._on_remove_from_menu)
+        require_action(menu.addAction(unload_label)).triggered.connect(self._on_remove_from_menu)
         return menu
 
     def _on_edit_triplet(self) -> None:
