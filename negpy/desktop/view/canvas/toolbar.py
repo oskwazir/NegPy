@@ -205,18 +205,24 @@ class ActionToolbar(QWidget):
         self._ov_sep_rotate = require_action(overflow_menu.addSeparator())
         self._ov_sep_rotate.setVisible(False)
 
-        self._action_undo = require_action(overflow_menu.addAction(qta.icon("fa5s.arrow-left", color=icon_color), "Undo  Ctrl+Z", self.session.undo))
-        self._action_redo = require_action(overflow_menu.addAction(qta.icon("fa5s.arrow-right", color=icon_color), "Redo  Ctrl+Y", self.session.redo))
+        self._action_undo = require_action(
+            overflow_menu.addAction(qta.icon("fa5s.arrow-left", color=icon_color), "Undo  Ctrl+Z", self.session.undo)
+        )
+        self._action_redo = require_action(
+            overflow_menu.addAction(qta.icon("fa5s.arrow-right", color=icon_color), "Redo  Ctrl+Y", self.session.redo)
+        )
         overflow_menu.addSeparator()
-        self._action_copy = require_action(overflow_menu.addAction(
-            qta.icon("fa5s.copy", color=icon_color), "Copy Settings  Ctrl+C", self.session.copy_settings
-        ))
-        self._action_copy_bounds = require_action(overflow_menu.addAction(
-            qta.icon("fa5s.copy", color=icon_color), "Copy Settings + Bounds  Ctrl+Shift+C", self.session.copy_settings_with_bounds
-        ))
-        self._action_paste = require_action(overflow_menu.addAction(
-            qta.icon("fa5s.paste", color=icon_color), "Paste Settings  Ctrl+V", self.session.paste_settings
-        ))
+        self._action_copy = require_action(
+            overflow_menu.addAction(qta.icon("fa5s.copy", color=icon_color), "Copy Settings  Ctrl+C", self.session.copy_settings)
+        )
+        self._action_copy_bounds = require_action(
+            overflow_menu.addAction(
+                qta.icon("fa5s.copy", color=icon_color), "Copy Settings + Bounds  Ctrl+Shift+C", self.session.copy_settings_with_bounds
+            )
+        )
+        self._action_paste = require_action(
+            overflow_menu.addAction(qta.icon("fa5s.paste", color=icon_color), "Paste Settings  Ctrl+V", self.session.paste_settings)
+        )
         overflow_menu.addSeparator()
         overflow_menu.addAction(qta.icon("fa5s.history", color=icon_color), "Reset Settings", self.session.reset_settings)
         overflow_menu.addSeparator()

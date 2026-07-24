@@ -518,7 +518,9 @@ class FileBrowser(QWidget):
         require_action(menu.addAction("Reset Settings")).triggered.connect(self.session.reset_settings)
         if multi:
             menu.addSeparator()
-            require_action(menu.addAction("Sync Edits to Selection")).triggered.connect(lambda: self.session.sync_selected_settings("edits"))
+            require_action(menu.addAction("Sync Edits to Selection")).triggered.connect(
+                lambda: self.session.sync_selected_settings("edits")
+            )
         if not multi:
             menu.addSeparator()
             require_action(menu.addAction("Edit RGB Triplet…")).triggered.connect(self._on_edit_triplet)

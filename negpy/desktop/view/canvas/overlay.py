@@ -420,7 +420,11 @@ class CanvasOverlay(QWidget):
 
     def _draw_crop_tool(self, painter: QPainter) -> None:
         if self._crop_drag_mode == "draw" and self._crop_draw_p1 is not None:
-            rect = QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1)).normalized().intersected(self._view_rect)
+            rect = (
+                QRectF(self._crop_draw_p1, (self._crop_draw_p2 if self._crop_draw_p2 is not None else self._crop_draw_p1))
+                .normalized()
+                .intersected(self._view_rect)
+            )
             pen = QPen(Qt.GlobalColor.white, 1, Qt.PenStyle.DashLine)
             pen.setCosmetic(True)
             painter.setBrush(Qt.BrushStyle.NoBrush)
