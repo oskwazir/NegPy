@@ -31,9 +31,7 @@ type:
 		--exclude "tests/" --exclude "docs/" --exclude "build/" --exclude "dist/" --exclude ".venv/" \
 		--ignore "unresolved-attribute" \
 		--ignore "invalid-method-override" \
-		--ignore "unsupported-operator" \
 		--ignore "unused-type-ignore-comment" \
-		--ignore "unresolved-import" \
 		--ignore "invalid-assignment"
 
 # Unit tests (pytest)
