@@ -27,10 +27,7 @@ class ScannerService:
         return self._get_backend().list_devices()
 
     def refresh_devices(self) -> list[ScannerDevice]:
-        backend = self._get_backend()
-        if hasattr(backend, "refresh_devices"):
-            return backend.refresh_devices()  # type: ignore[union-attr]
-        return backend.list_devices()
+        return self._get_backend().refresh_devices()
 
     def run_scan(
         self,

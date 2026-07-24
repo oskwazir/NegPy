@@ -60,11 +60,11 @@ class GPUDevice:
 
     def poll(self) -> None:
         """Forces hardware queue processing for async operations."""
-        if self.device:
-            if hasattr(self.device, "poll"):
-                self.device.poll()
-            elif hasattr(self.device, "_poll"):
-                self.device._poll()
+        if not self.device:
+            return
+        poll_fn = getattr(self.device, "poll", None) or getattr(self.device, "_poll", None)
+        if callable(poll_fn):
+            poll_fn()
 
     @classmethod
     def destroy_singleton(cls) -> None:

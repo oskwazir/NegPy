@@ -25,6 +25,7 @@ class ScannerDevice:
 
 class ScannerBackend(Protocol):
     def list_devices(self) -> list[ScannerDevice]: ...
+    def refresh_devices(self) -> list[ScannerDevice]: ...
     def scan(
         self,
         device_id: str,

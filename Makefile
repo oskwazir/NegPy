@@ -35,8 +35,7 @@ type:
 		--ignore "unsupported-operator" \
 		--ignore "unused-type-ignore-comment" \
 		--ignore "unresolved-import" \
-		--ignore "invalid-assignment" \
-		--ignore "call-non-callable"
+		--ignore "invalid-assignment"
 
 # Unit tests (pytest)
 .PHONY: test
